@@ -8,19 +8,22 @@ import win32api, win32con
 global GAME_REGION
 
 # All images 
-SKILL_ICONS = ['A', 'B']
+SKILL_ICONS = ['A', 'B', 'C']
 
-# Area where skills are located at
+# Area where skills are located at (left, top, width, height)
 SKILLS_AREA = region=(607, 901 , 250, 250)
 
-found = False  
+inCooldown = {}
+shown = {}
+
+found = False 
   
 print("Finding game region...")
 region = pyautogui.locateOnScreen("reference.png")
   
 while region is None:
   print("Could not find game on screen. Is the game visible?")
-  time.sleep(5)
+  time.sleep(2)
   region = pyautogui.locateOnScreen("reference.png")
 
   # if region is none, keep going
@@ -39,7 +42,20 @@ if found:
   while 1:
     # Check if skils are on screen
     for skill in SKILL_ICONS:
+       
       foundSkill = pyautogui.locateOnScreen('keys/'+skill+'.png', region=SKILLS_AREA)
+      
+      # If we found the skill 
       if foundSkill != None:
-        print('Skill '+skill+' encontrada em: '+str(foundSkill))
+        if (shown.get(skill) == True):
+          continue
+        print('Skill '+skill+' saiu do cooldown '+str(foundSkill))
+        inCooldown[skill] = False
+        shown[skill] = True
+        
+      elif pyautogui.locateOnScreen('keys/'+skill+'.png', region=SKILLS_AREA, grayscale=True, confidence=0.5) and inCooldown.get(skill) == False:
+        print('Skill '+str(skill)+' cooldown')
+        inCooldown[skill] = True
+        shown[skill] = False
+      
     time.sleep(2)   
