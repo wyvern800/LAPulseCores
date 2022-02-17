@@ -3,3 +3,5 @@ keyboard
 pyautogui
 opencv-python
 pillow
+tk
+psutil
