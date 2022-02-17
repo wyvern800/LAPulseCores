@@ -1,4 +1,4 @@
-# LAPulseCores
+# Lost Ark Pulse Cores
 DoomPulseCores-like addon for Lost Ark written in Python
 
 ## How to run
